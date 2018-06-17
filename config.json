@@ -1,0 +1,14 @@
+{
+    "Server": {
+        "Name": "most",
+        "Description": "May[]'s shitty hosting.",
+        "Port": "80",
+        "Upload_Endpoint": "/api/upload/",
+        "Download_Endpoint": "/api/download"
+    },
+
+    "Database": {
+        "Name": "most-db",
+        "Path": "db/"
+    }
+}
