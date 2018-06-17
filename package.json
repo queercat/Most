@@ -1,0 +1,36 @@
+{
+  "name": "most",
+  "version": "1.0.0",
+  "description": "File hosting on the tiny.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolsek/most.git"
+  },
+  "keywords": [
+    "file-hosting",
+    "file",
+    "hosting",
+    "file-sharing",
+    "tiny-file-hosting",
+    "node",
+    "nodejs",
+    "express-app"
+  ],
+  "author": "nicolsek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicolsek/most/issues"
+  },
+  "homepage": "https://github.com/nicolsek/most#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "formidable": "^1.2.1",
+    "fs": "0.0.1-security",
+    "pouchdb": "^6.4.3"
+  }
+}

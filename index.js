@@ -18,10 +18,26 @@ var app_name = get(serverConfig, 'Name');
 var app_description = get(serverConfig, 'Config');
 var app_port = get(serverConfig, 'Port');
 
+var app_upload_endpoint = get(serverConfig, 'Upload_Endpoint');
+var app_download_endpoint = get(serverConfig, 'Download_Endpoint');
+
 var db_name = get(dbConfig, 'Name');
 var db_path = get(dbConfig, 'Path');
 
+/* Handle uploads. */
+app.post(app_upload_endpoint, (req, resp) => {
+    console.log('POSTed file.');
+});
 
+/* Serve page. */
+app.get('/', (req, res) => {
+    console.log('REQed page.');
+})
+
+/* Handle downloads. */
+app.get(app_download_endpoint, (req, res) => {
+    console.log('REQed file.');
+});
 
 /**
  * @desc Returns a parameter from a JSON object.
@@ -43,5 +59,5 @@ function parse(str) {
 }
 
 /* Start the app and listen for incoming connections. */
-console.log(app_name + ' listening @' + app_port);
+console.log(app_name + ' listening on *:' + app_port);
 app.listen(app_port);
