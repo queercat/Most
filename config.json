@@ -4,7 +4,8 @@
         "Description": "May[]'s shitty hosting.",
         "Port": "8080",
         "Upload_Endpoint": "/files/upload/",
-        "Download_Endpoint": "/files/"
+        "Download_Endpoint": "/files/",
+        "Frontpage_Path": "resources/frontpage"
     },
 
     "Database": {
