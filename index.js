@@ -15,7 +15,7 @@ var dbConfig = get(configObj, 'Database');
 var app = express(); 
 
 var app_name = get(serverConfig, 'Name');
-var app_description = get(serverConfig, 'Config');
+var app_description = get(serverConfig, 'Description');
 var app_port = get(serverConfig, 'Port');
 var app_frontpage_path = get(serverConfig, 'Frontpage_Path');
 
@@ -25,6 +25,15 @@ var app_download_endpoint = get(serverConfig, 'Download_Endpoint');
 var db_name = get(dbConfig, 'Name');
 var db_path = get(dbConfig, 'Path');
 
+/* Variables that should be customized the the user's liking. */
+var frontpageTemplate = {
+    name: app_name,
+    description: app_description,
+    upload_endpoint: app_upload_endpoint
+};
+
+var frontpage = generateFromTemplate(fs.readFileSync(app_frontpage_path).toString(), frontpageTemplate);
+
 /* Handle uploads. */
 app.post(app_upload_endpoint, (req, resp) => {
     console.log('POSTed file.');
@@ -32,22 +41,13 @@ app.post(app_upload_endpoint, (req, resp) => {
 
 /* Serve page. */
 app.get('/', (req, res) => {
-     
+    res.send(frontpage);
 });
 
 /* Handle downloads. */
 app.get(app_download_endpoint, (req, res) => {
     console.log('REQed file.');
 });
-
-/**
- * 
- * @param {String} str string to find and replace with from templateObj.
- * @param {*} templateObj 
- */
-function templateLookup(str, templateObj) {
-
-}
 
 /**
  * @desc Generate text from a template with replacements. 
@@ -62,8 +62,14 @@ function generateFromTemplate(str, templateObj) {
         startCurly = occurenceIndex = str.indexOf('{', occurenceIndex);
         endCurly = str.indexOf('}', occurenceIndex);
 
-        templateLookup()
+        /* Replace all the text with the template text. */
+        oldStr = str.slice(startCurly, endCurly + 1)
+        newStr = get(templateObj, oldStr.slice(1, oldStr.length - 1)); 
+
+        str = replace(str, oldStr, newStr);
     }
+
+    return str;
 
     /** [Example] 
      * var str = 'that is {adjective}'
@@ -73,6 +79,16 @@ function generateFromTemplate(str, templateObj) {
      * [Output]
      * that is cool
      */
+}
+
+/**
+ * @param {String} origStr the string to search for old-string with and replace with new-string.
+ * @param {String} oldStr search for this exact string and replace it with the new string. 
+ * @param {String} newStr the new string to replace the old string.
+ * @returns {String} the newly replaced string.
+ */
+function replace(origStr, oldStr, newStr) {
+    return origStr.replace(oldStr, newStr);
 }
 
 /**
