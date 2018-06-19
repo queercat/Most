@@ -1,9 +1,9 @@
 {
     "server": {
         "name": "most",
-        "description": "May[]'s shitty hosting.",
+        "description": "<Description>",
         "port": 80,
-        "domain": "moehost.tk",
+        "domain": "<Your domain>",
         "upload_Endpoint": "/files/upload/",
         "download_Endpoint": "/files/",
         "frontpage_Path": "resources/frontpage",
