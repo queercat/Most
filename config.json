@@ -1,15 +1,14 @@
 {
-    "Server": {
-        "Name": "most",
-        "Description": "May[]'s shitty hosting.",
-        "Port": "8080",
-        "Upload_Endpoint": "/files/upload/",
-        "Download_Endpoint": "/files/",
-        "Frontpage_Path": "resources/frontpage"
-    },
-
-    "Database": {
-        "Name": "most-db",
-        "Path": "db/"
+    "server": {
+        "name": "most",
+        "description": "May[]'s shitty hosting.",
+        "port": 8080,
+        "domain": "moehost.tk",
+        "upload_Endpoint": "/files/upload/",
+        "download_Endpoint": "/files/",
+        "frontpage_Path": "resources/frontpage",
+        "404_path": "resources/404",
+        "upload_Directory": "uploads/",
+        "max_file_size": 256
     }
 }

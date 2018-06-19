@@ -1,52 +1,89 @@
 /* Libraries needed. */
 var fs = require('fs'); // File system management.
-var PouchDB = require('pouchdb'); // JSON database.
+var path = require('path'); // Path stuff.
+var crypto = require('crypto'); // File name generation.
 var formidable = require('formidable'); // Handles uploads.
 var express = require('express'); // Web framework.
+var mime = require('mime-types');
 
 /* Config stuff. */
 var configPath = 'config.json'; // Change this to wherever you keep the JSON config.
 var configObj = parse(fs.readFileSync(configPath)); // Creates the JSONified config.
 
-var serverConfig = get(configObj, 'Server');
-var dbConfig = get(configObj, 'Database');
+var serverConfig = get(configObj, 'server');
+var dbConfig = get(configObj, 'database');
 
 /* Variables from libraries and config. */
 var app = express(); 
 
-var app_name = get(serverConfig, 'Name');
-var app_description = get(serverConfig, 'Description');
-var app_port = get(serverConfig, 'Port');
-var app_frontpage_path = get(serverConfig, 'Frontpage_Path');
+var app_name = get(serverConfig, 'name');
+var app_description = get(serverConfig, 'description');
+var app_port = get(serverConfig, 'port');
+var app_frontpage_path = get(serverConfig, 'frontpage_Path');
+var app_404_path = get(serverConfig, '404_path');
+var app_domain = get(serverConfig, 'domain');
 
-var app_upload_endpoint = get(serverConfig, 'Upload_Endpoint');
-var app_download_endpoint = get(serverConfig, 'Download_Endpoint');
-
-var db_name = get(dbConfig, 'Name');
-var db_path = get(dbConfig, 'Path');
+var app_upload_endpoint = get(serverConfig, 'upload_Endpoint');
+var app_download_endpoint = get(serverConfig, 'download_Endpoint');
+var app_upload_directory = get(serverConfig, 'upload_Directory');
+var app_max_file_size = get(serverConfig, 'max_file_size'); // in megabytes.
 
 /* Variables that should be customized the the user's liking. */
-var frontpageTemplate = {
+let frontpageTemplate = {
     name: app_name,
     description: app_description,
-    upload_endpoint: app_upload_endpoint
+    upload_endpoint: app_upload_endpoint,
+    max_file_size: app_max_file_size,
+    domain: app_domain
 };
 
-var frontpage = generateFromTemplate(fs.readFileSync(app_frontpage_path).toString(), frontpageTemplate);
+let frontpage = generateFromTemplate(fs.readFileSync(app_frontpage_path).toString(), frontpageTemplate);
+let upload_directory = path.join(__dirname, app_upload_directory)
 
 /* Handle uploads. */
-app.post(app_upload_endpoint, (req, resp) => {
-    console.log('POSTed file.');
+app.post(app_upload_endpoint, (req, res) => {
+     form = new formidable.IncomingForm();
+
+    form.uploadDir = app_upload_directory;
+    form.keepExtensions = true;
+    form.maxFileSize = app_max_file_size * 1024 * 1024;
+
+    let newFileName = '';
+
+    form.on('fileBegin', function(name, file) {
+        newFileName = crypto.randomBytes(4).toString('hex') + '.' + mime.extension(file.type);
+        file.path = path.join(upload_directory, newFileName);
+    });
+
+    form.on('file', function(name, file) {
+        console.log('Uploaded file: ' + newFileName);
+    });
+
+    form.on('end', function() {
+        res.set('Content-Type', 'text/plain');
+        res.send(path.join(app_domain, path.join(app_download_endpoint, newFileName)) + '\n');
+        res.end();
+    });
+
+    form.parse(req);
 });
 
-/* Serve page. */
+/* Serve static page. */
 app.get('/', (req, res) => {
     res.send(frontpage);
 });
 
 /* Handle downloads. */
-app.get(app_download_endpoint, (req, res) => {
-    console.log('REQed file.');
+app.get(path.join(app_download_endpoint, ':file'), (req, res) => {
+    fileReq = req.params.file;
+    fileReqPath = path.join(upload_directory, fileReq)
+
+    if (fs.existsSync(fileReqPath)) {
+        res.sendFile(fileReqPath);
+    } else {
+        res.status(404).send(fs.readFileSync(app_404_path).toString());
+    }
+
 });
 
 /**
