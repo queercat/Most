@@ -61,13 +61,11 @@ app.post(app_upload_endpoint, (req, res) => {
 
     form.on('error', function(err) {
         console.log('Upload error! ' + err.toString());
-        res.set('Content-Type', 'text/plain');
         res.send('Error uploading file!\n');
         res.end();
     });
 
     form.on('aborted', function() {
-        res.set('Content-Type', 'text/plain');
         res.send('Upload aborted.\n')
         res.end();
     });
