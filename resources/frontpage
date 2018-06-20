@@ -1,5 +1,5 @@
 This is the frontpage of <b>{name}</b>, {description} <br>
 Max file size: {max_file_size}mb. <br><br>
 
-curl -X POST -H "Content-Type: multipart/form-data" <br>
--F "data=@file" {domain}{upload_endpoint}
+curl {domain}{upload_endpoint} -X POST -H "Content-Type: multipart/form-data" <br>
+-F "data=@file"
