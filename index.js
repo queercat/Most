@@ -42,7 +42,7 @@ let upload_directory = path.join(__dirname, app_upload_directory)
 
 /* Handle uploads. */
 app.post(app_upload_endpoint, (req, res) => {
-     form = new formidable.IncomingForm();
+    form = new formidable.IncomingForm();
 
     form.uploadDir = app_upload_directory;
     form.keepExtensions = true;
@@ -57,6 +57,19 @@ app.post(app_upload_endpoint, (req, res) => {
 
     form.on('file', function(name, file) {
         console.log('Uploaded file: ' + newFileName);
+    });
+
+    form.on('error', function(err) {
+        console.log('Upload error! ' + err.toString());
+        res.set('Content-Type', 'text/plain');
+        res.send('Error uploading file!\n');
+        res.end();
+    });
+
+    form.on('aborted', function() {
+        res.set('Content-Type', 'text/plain');
+        res.send('Upload aborted.\n')
+        res.end();
     });
 
     form.on('end', function() {
