@@ -51,7 +51,7 @@ app.post(app_upload_endpoint, (req, res) => {
     let newFileName = '';
 
     form.on('fileBegin', function(name, file) {
-        newFileName = crypto.randomBytes(4).toString('hex') + '.' + mime.extension(file.type);
+        newFileName = crypto.randomBytes(4).toString('hex') + '.' + file.name.split('.')[file.name.split('.').length - 1];
         file.path = path.join(upload_directory, newFileName);
     });
 
@@ -155,9 +155,6 @@ function get(obj, param) {
 function parse(str) {
     return JSON.parse(str);
 }
-
-console.log(mime.contentType('file.webm'))
-
 /* Start the app and listen for incoming connections. */
-//console.log(app_name + ' listening on *:' + app_port);
-//app.listen(app_port);
+console.log(app_name + ' listening on *:' + app_port);
+app.listen(app_port);
