@@ -156,6 +156,8 @@ function parse(str) {
     return JSON.parse(str);
 }
 
+console.log(mime.contentType('file.webm'))
+
 /* Start the app and listen for incoming connections. */
-console.log(app_name + ' listening on *:' + app_port);
-app.listen(app_port);
+//console.log(app_name + ' listening on *:' + app_port);
+//app.listen(app_port);

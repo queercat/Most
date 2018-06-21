@@ -1,14 +1,14 @@
 {
     "server": {
-        "name": "most",
-        "description": "<Description>",
+        "name": "most-debug",
+        "description": "Debug mode.",
         "port": 80,
-        "domain": "<Your domain>",
+        "domain": "localhost",
         "upload_Endpoint": "/files/upload/",
         "download_Endpoint": "/files/",
         "frontpage_Path": "resources/frontpage",
         "404_path": "resources/404",
         "upload_Directory": "uploads/",
-        "max_file_size": 256
+        "max_file_size": 1024
     }
 }
