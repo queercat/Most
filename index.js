@@ -4,7 +4,6 @@ var path = require('path'); // Path stuff.
 var crypto = require('crypto'); // File name generation.
 var formidable = require('formidable'); // Handles uploads.
 var express = require('express'); // Web framework.
-var mime = require('mime-types');
 
 /* Config stuff. */
 var configPath = 'config.json'; // Change this to wherever you keep the JSON config.
