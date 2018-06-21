@@ -27,8 +27,7 @@ Assuming you have a copy of most already and an up to date set of packages just.
 
 * [JSON](https://www.json.org/) - The world's best data-interchange format.
 * [Express](https://expressjs.com/) - Awesome minimalist web-framework.
-* [Formidable](https://www.npmjs.com/package/mime-types) - Used to parse and save uploads.
-* [Mime](https://www.npmjs.com/package/mime-types) - Used for generating extensions from mime-types.
+* [Formidable](https://github.com/felixge/node-formidable) - Used to parse and save uploads.
 
 ## Authors
 
