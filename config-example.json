@@ -3,7 +3,7 @@
         "name": "most",
         "description": "<Description>",
         "port": 80,
-        "domain": "<Your Domain.>",
+        "domain": "<Your Domain>",
         "upload_Endpoint": "/files/upload/",
         "download_Endpoint": "/files/",
         "frontpage_Path": "resources/frontpage",
