@@ -9,6 +9,8 @@
         "frontpage_Path": "resources/frontpage",
         "404_path": "resources/404",
         "upload_Directory": "uploads/",
-        "max_file_size": 256
+        "max_file_size": 256,
+        "private_key_path": "<Path to Private Key>",
+        "certificate_path": "<Path to Certificate>"
     }
 }

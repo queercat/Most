@@ -4,6 +4,7 @@ var path = require('path'); // Path stuff.
 var crypto = require('crypto'); // File name generation.
 var formidable = require('formidable'); // Handles uploads.
 var express = require('express'); // Web framework.
+var commander = require('commander');
 
 /* Config stuff. */
 var configPath = 'config.json'; // Change this to wherever you keep the JSON config.
@@ -26,6 +27,9 @@ var app_upload_endpoint = get(serverConfig, 'upload_Endpoint');
 var app_download_endpoint = get(serverConfig, 'download_Endpoint');
 var app_upload_directory = get(serverConfig, 'upload_Directory');
 var app_max_file_size = get(serverConfig, 'max_file_size'); // in megabytes.
+
+/* Valid CLI arguments. */
+commander.option('-S', '--SSL', 'Enable SSL, must specify locations in your config.json').parse(process.argv);
 
 /* Variables that should be customized the the user's liking. */
 let frontpageTemplate = {
@@ -154,6 +158,19 @@ function get(obj, param) {
 function parse(str) {
     return JSON.parse(str);
 }
-/* Start the app and listen for incoming connections. */
+
+
+/* Start server in either HTTP or HTTPS mode. */
+if (commander['SSL']) {
+    var privateKeyPath = get(serverConfig, 'private_key_path');
+    var certificatePath = get(serverConfig, 'certificate_path');
+
+    https.createServer({
+        key: fs.readFileSync(privateKeyPath),
+        cert: fs.readFileSync(certificatePath)
+    }, app).listen(app_port);
+} else {
+    app.listen(app_port);
+}
+
 console.log(app_name + ' listening on *:' + app_port);
-app.listen(app_port);
