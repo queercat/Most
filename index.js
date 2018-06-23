@@ -4,6 +4,7 @@ var path = require('path'); // Path stuff.
 var crypto = require('crypto'); // File name generation.
 var formidable = require('formidable'); // Handles uploads.
 var https = require('https'); // Handles secure connections.
+var http = require('http'); // Handles redirection.
 var express = require('express'); // Web framework.
 var commander = require('commander'); // Handles argument parsing.
 
@@ -176,7 +177,7 @@ if (commander['SSL']) {
     console.log(app_name + ' listening on *:' + app_ssl_port);
 
     /* Redirect non-https connections. */
-    https.createServer(function(req, res) {
+    http.createServer(function(req, res) {
         res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url }); // Redirect to HTTPS version.
         res.end();
     }).listen(app_port);
