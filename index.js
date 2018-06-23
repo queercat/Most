@@ -39,6 +39,7 @@ commander
     .parse(process.argv);
 
 /* Variables that should be customized the the user's liking. */
+
 let frontpageTemplate = {
     name: app_name,
     description: app_description,
@@ -80,7 +81,7 @@ app.post(app_upload_endpoint, (req, res) => {
 
     form.on('end', function() {
         res.set('Content-Type', 'text/plain');
-        res.send(path.join('http://', path.join(app_domain, path.join(app_download_endpoint, newFileName)) + '\n'));
+        res.send(path.join(path.join(app_domain, path.join(app_download_endpoint, newFileName)) + '\n'));
         res.end();
     });
 
