@@ -81,7 +81,7 @@ app.post(app_upload_endpoint, (req, res) => {
 
     form.on('end', function() {
         res.set('Content-Type', 'text/plain');
-        res.send(path.join(path.join(app_domain, path.join(app_download_endpoint, newFileName)) + '\n'));
+        res.send(app_domain + path.join(app_download_endpoint, newFileName) + '\n');
         res.end();
     });
 
