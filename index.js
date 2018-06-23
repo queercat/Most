@@ -169,8 +169,8 @@ function parse(str) {
 if (commander['SSL']) {
     /* Start the server in HTTPS mode. */
     https.createServer({
-        key: fs.readFileSync(privateKeyPath),
-        cert: fs.readFileSync(certificatePath)
+        key: fs.readFileSync(app_private_key_path),
+        cert: fs.readFileSync(app_certificate_path)
     }, app).listen(app_ssl_port);
 
     console.log(app_name + ' listening on *:' + app_ssl_port);
