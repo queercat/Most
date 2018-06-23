@@ -3,15 +3,15 @@ var fs = require('fs'); // File system management.
 var path = require('path'); // Path stuff.
 var crypto = require('crypto'); // File name generation.
 var formidable = require('formidable'); // Handles uploads.
+var https = require('https'); // Handles secure connections.
 var express = require('express'); // Web framework.
-var commander = require('commander');
+var commander = require('commander'); // Handles argument parsing.
 
 /* Config stuff. */
 var configPath = 'config.json'; // Change this to wherever you keep the JSON config.
 var configObj = parse(fs.readFileSync(configPath)); // Creates the JSONified config.
 
 var serverConfig = get(configObj, 'server');
-var dbConfig = get(configObj, 'database');
 
 /* Variables from libraries and config. */
 var app = express(); 
@@ -19,9 +19,13 @@ var app = express();
 var app_name = get(serverConfig, 'name');
 var app_description = get(serverConfig, 'description');
 var app_port = get(serverConfig, 'port');
+var app_port_ssl = get(serverConfig, 'port_ssl');
 var app_frontpage_path = get(serverConfig, 'frontpage_Path');
 var app_404_path = get(serverConfig, '404_path');
 var app_domain = get(serverConfig, 'domain');
+
+var app_private_key_path = get(serverConfig, 'private_key_path');
+var app_certificate_path = get(serverConfig, 'certificate_path');
 
 var app_upload_endpoint = get(serverConfig, 'upload_Endpoint');
 var app_download_endpoint = get(serverConfig, 'download_Endpoint');
@@ -29,7 +33,9 @@ var app_upload_directory = get(serverConfig, 'upload_Directory');
 var app_max_file_size = get(serverConfig, 'max_file_size'); // in megabytes.
 
 /* Valid CLI arguments. */
-commander.option('-S', '--SSL', 'Enable SSL, must specify locations in your config.json').parse(process.argv);
+commander
+    .option('-s, --SSL', 'Enable SSL, must specify locations in your config.json')
+    .parse(process.argv);
 
 /* Variables that should be customized the the user's liking. */
 let frontpageTemplate = {
@@ -159,18 +165,27 @@ function parse(str) {
     return JSON.parse(str);
 }
 
-
 /* Start server in either HTTP or HTTPS mode. */
 if (commander['SSL']) {
-    var privateKeyPath = get(serverConfig, 'private_key_path');
-    var certificatePath = get(serverConfig, 'certificate_path');
-
+    /* Start the server in HTTPS mode. */
     https.createServer({
         key: fs.readFileSync(privateKeyPath),
         cert: fs.readFileSync(certificatePath)
-    }, app).listen(app_port);
-} else {
-    app.listen(app_port);
-}
+    }, app).listen(app_ssl_port);
 
-console.log(app_name + ' listening on *:' + app_port);
+    console.log(app_name + ' listening on *:' + app_ssl_port);
+
+    /* Redirect non-https connections. */
+    https.createServer(function(req, res) {
+        res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url }); // Redirect to HTTPS version.
+        res.end();
+    }).listen(app_port);
+
+    console.log(app_name + ' redirecting to *:' + app_ssl_port + ' from *:' + app_port);
+
+
+} else {
+    /* Start the server in HTTP mode. */
+    app.listen(app_port);
+    console.log(app_name + ' listening on *:' + app_port);
+}

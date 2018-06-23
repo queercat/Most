@@ -3,6 +3,7 @@
         "name": "most",
         "description": "<Description>",
         "port": 80,
+        "port_ssl": 443,
         "domain": "<Your Domain>",
         "upload_Endpoint": "/files/upload/",
         "download_Endpoint": "/files/",
