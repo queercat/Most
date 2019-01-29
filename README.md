@@ -10,7 +10,7 @@ I needed something to host my files and stuff so I decided to write it myself.
 
 ### Installing
 
-`$ git clone https://github.com/nicolsek/most`  
+`$ git clone https://github.com/queercat/most`  
 `$ cd most`  
 `$ npm install`  
 
