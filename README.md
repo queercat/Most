@@ -31,7 +31,7 @@ Assuming you have a copy of most already and an up to date set of packages just.
 
 ## Authors
 
-* **Nicole Tusek** - *Design and Creation* - [Nicolsek](https://github.com/Nicolsek)
+* **May Tusek** - *Design and Creation* - [Queercat](https://github.com/queercat)
 
 ## License
 
